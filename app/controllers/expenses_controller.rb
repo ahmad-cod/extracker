@@ -23,4 +23,25 @@ class ExpensesController < ApplicationController
     @expense = current_user.expenses.find(params[:id])
   end
 
+  def update
+    @expense = current_user.expenses.find(params[:id])
+
+    if @expense.update(expense_params)
+      redirect_to expenses_path, notice: 'Expense updated successfully.'
+    else
+      render :edit, alert: 'Error updating expense.'
+    end
+  end
+
+  def destroy
+    @expense = current_user.expenses.find(params[:id])
+    @expense.destroy
+  end
+
+  private
+
+  def expense_params
+    params.require(:expense).permit(:item_name, :cost, :logged_date)
+  end
+
 end
